@@ -78,10 +78,10 @@ int SolveQuadraticEquation(double a, double b, double c, double *x1, double *x2)
             NumOfRoots = 1;
         }
     } else {    /*a != 0*/
-        int discriminant = b*b - 4*a*c;
+        double discriminant = b*b - 4*a*c;
         if (discriminant < 0)
             NumOfRoots = 0;
-        else if (discriminant == 0) {
+        else if (DoubleComparison (discriminant, 0) == 1) {
             NumOfRoots = 1;
             *x1 = *x2 = -b / (2*a);
         } else {
@@ -109,7 +109,7 @@ int DoubleComparison(double a, double b)
     double diff = fabs(a - b);
     a = fabs(a);
     b = fabs(b);
-    double largest = (b > a) ? b : a; //?
+    double largest = (b > a) ? b : a;
     if(diff <= largest * FLT_EPSILON)
         return 1;
     else
