@@ -3,17 +3,24 @@
 #include <float.h>
 #include <math.h>
 
-int FinishProgram();
+bool DoubleComparison (double a, double b);
 
 int main() {
-    float a = 10, b = 5;
-    float diff = fabs(a - b);
-    a = fabs(a);
-    b = fabs(b);
-    float largest = (b > a) ? b : a;
-    if(diff <= largest * FLT_EPSILON)
-        printf("kaif\n");
+    double a = 0, b = 0;
+    if (DoubleComparison(a, b))
+        printf("kaif");
     else
-        printf("nekaif((\n");
+        printf("nekaif");
 }
 
+bool DoubleComparison (double a, double b)
+{
+    double diff = fabs(a - b);
+    a = fabs(a);
+    b = fabs(b);
+    double largest = (b > a) ? b : a;
+    if(diff <= largest * FLT_EPSILON)
+        return true; // true
+    else
+        return false; // false
+}
