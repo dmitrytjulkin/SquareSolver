@@ -1,30 +1,19 @@
 #include <stdio.h>
 #include <string.h>
+#include <float.h>
+#include <math.h>
 
 int FinishProgram();
 
 int main() {
-    printf("Do you want to finish?\nYES/NO\n");
-    if (FinishProgram() == 1){
-        printf("You've finished the program.\n");
-    } else{
-        printf("Continue.\n");
-    }
+    float a = 10, b = 5;
+    float diff = fabs(a - b);
+    a = fabs(a);
+    b = fabs(b);
+    float largest = (b > a) ? b : a;
+    if(diff <= largest * FLT_EPSILON)
+        printf("kaif\n");
+    else
+        printf("nekaif((\n");
 }
 
-int FinishProgram()
-{
-    char UsersAnswer[10] = {};
-    char ans1[] = "YES", ans2[] = "NO";
-    int AnsMatches = 0;
-    while (AnsMatches == 0){
-        scanf("%s", UsersAnswer);
-        if (strcmp(UsersAnswer, ans1) == 0)
-            return 1;
-        else if (strcmp(UsersAnswer, ans2) == 0)
-            return 0;
-        printf("Incorrect input, try again:\n");
-        while(getchar() != '\n');
-    }
-    return 0;
-}

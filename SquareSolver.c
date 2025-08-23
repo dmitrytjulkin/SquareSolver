@@ -2,11 +2,13 @@
 #include <math.h>
 #include <assert.h>
 #include <string.h>
+#include <float.h>
 
 /*this program solve quadratic equation*/
 int FinishProgram();
 int SolveQuadraticEquation(double, double, double, double*, double*);
 void ChooseCase(int, double, double);
+int DoubleComparison(double, double);
 
 const int INF = -1;
 
@@ -52,6 +54,7 @@ int FinishProgram()
         printf("Incorrect input, try again:\n");
         while(getchar() != '\n');
     }
+    return 0;
 }
 
 int SolveQuadraticEquation(double a, double b, double c, double *x1, double *x2)
@@ -64,9 +67,9 @@ int SolveQuadraticEquation(double a, double b, double c, double *x1, double *x2)
     assert (x2 != NULL);
 
     int NumOfRoots;
-    if (a == 0){    /*linear equation*/
-        if (b == 0){
-            if (c == 0)
+    if (DoubleComparison (a, 0) == 1){    /*linear equation*/
+        if (DoubleComparison (b, 0) == 1){
+            if (DoubleComparison (c, 0) == 1)
                 NumOfRoots = INF;
             else
                 NumOfRoots = 0;
@@ -99,4 +102,16 @@ void ChooseCase(int NumOfRoots, double x1, double x2){
         printf("This equation has one root: x = %.6lf.\n", x1);
     else
         printf("This equation has two roots: x1 = %.6lf, x2 = %.6lf.\n", x1, x2);
+}
+
+int DoubleComparison(double a, double b)
+{
+    double diff = fabs(a - b);
+    a = fabs(a);
+    b = fabs(b);
+    double largest = (b > a) ? b : a; //?
+    if(diff <= largest * FLT_EPSILON)
+        return 1;
+    else
+        return 0;
 }
