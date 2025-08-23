@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
+#include <string.h>
+
 /*this program solve quadratic equation*/
+int FinishProgram();
 int SolveQuadraticEquation(double, double, double, double*, double*);
 void ChooseCase(int, double, double);
 
@@ -15,9 +18,14 @@ int main ()
     double x1 = 0, x2 = 0;   /*roots*/
     int i = 1;
     while (i != 0){
-        if (scanf ("%f", &a) != 1 || scanf ("%f", &b) != 1 || scanf ("%f", &c) != 1){
+        if (scanf ("%lf", &a) != 1 || scanf ("%lf", &b) != 1 || scanf ("%lf", &c) != 1){
             printf("Incorrect input, try again:\n");
+            printf("Do you want to finish?\n YES/NO\n");
             while(getchar() != '\n');
+            if (FinishProgram() == 1){
+                printf("You've finished the program.\n");
+                break;
+            }
             continue;
         } else {
             int NumOfRoots = 0;
@@ -26,6 +34,24 @@ int main ()
         }
     }
     return 0;
+}
+
+int FinishProgram()
+{
+    char UsersAnswer[100] = " ";
+    char ans1[] = "YES", ans2[] = "NO";
+    int AnsMatches = 0;
+    while (AnsMatches == 0){
+        scanf("%s", UsersAnswer);
+        if (strcmp(UsersAnswer, ans1) == 0)
+            return 1;
+        else if (strcmp(UsersAnswer, ans2) == 0){
+            printf("Please, enter the coefficients a, b, c:\n");
+            return 0;
+        }
+        printf("Incorrect input, try again:\n");
+        while(getchar() != '\n');
+    }
 }
 
 int SolveQuadraticEquation(double a, double b, double c, double *x1, double *x2)
@@ -70,7 +96,7 @@ void ChooseCase(int NumOfRoots, double x1, double x2){
     else if (NumOfRoots == 0)
         printf("This equation has no roots.\n");
     else if (NumOfRoots == 1)
-        printf("This equation has one root: x = %.6f.\n", x1);
+        printf("This equation has one root: x = %.6lf.\n", x1);
     else
-        printf("This equation has two roots: x1 = %.6f, x2 = %.6f.\n", x1, x2);
+        printf("This equation has two roots: x1 = %.6lf, x2 = %.6lf.\n", x1, x2);
 }
