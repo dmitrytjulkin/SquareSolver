@@ -37,6 +37,7 @@ int main ()
 
     return 0;
 }
+
 int Solve()
 {
     double a = 0, b = 0, c = 0;  //coefficients
@@ -62,16 +63,23 @@ int Solve()
 
     return 0;
 }
+
 int InputCoefficients (double *a, double *b, double *c)
 {
-    if (scanf ("%lf", &*a) != 1 || scanf ("%lf", &*b) != 1 || scanf ("%lf", &*c) != 1 || getchar() != '\n') { //if after c comes space ot tab
+
+    if (scanf ("%lf", a) != 1 || scanf ("%lf", b) != 1 || scanf ("%lf", c) != 1 || getchar() != '\n') { //write function that checks spaces
     //in case if user made a mistake
 
-        printf("Incorrect input, try again:\n");
-        printf("Do you want to finish?\nYES/NO\n");
+        printf("Incorrect input, try again:\n"
+                "Do you want to finish?\n"
+                "Input 1 to end the program or 0 to continue.\n");
+
+        CleanTheBuffer();
 
         if (FinishProgram() == 1)
             return WANT_TO_FINISH;
+
+        printf ("Please, enter the coefficients a, b, c:\n");
 
         return WANT_TO_CORRECT;
 
@@ -82,27 +90,17 @@ int InputCoefficients (double *a, double *b, double *c)
 
 int FinishProgram ()
 {
-    char UsersAnswer[4] = {};
-    char ans1[] = "YES", ans2[] = "NO";
+    int UsersAnswer = -1;
     int AnsMatches = 0;
 
     while (AnsMatches == 0) {
+
+        if (scanf ("%d", &UsersAnswer) == 1 && (UsersAnswer == 0 || UsersAnswer == 1) && getchar() == '\n')
+            return UsersAnswer;
         CleanTheBuffer();
-        scanf("%3s", UsersAnswer);
-
-        if (strcmp(UsersAnswer, ans1) == 0)
-            return 1;
-
-        else if (strcmp(UsersAnswer, ans2) == 0) {
-
-            printf("Please, enter the coefficients a, b, c:\n");
-
-            return 0;
-        }
-
-        printf("Incorrect input, try again.\n");
-        printf("Do you want to finish?\n");
-        printf("(only YES or NO answers)\n");
+        printf("Incorrect input, try again.\n"
+                "Do you want to finish?\n"
+                "(input 1 if you want to End the program and 0 if you want to continue)\n");
     }
 
     return 0;
@@ -132,6 +130,9 @@ int SolveEquation (double a, double b, double c, double *x1, double *x2)
 
 int LinearEquation (double b, double c, double* x1, double* x2)
 {
+    assert (x1 != NULL);
+    assert (x2 != NULL);
+
     int NumOfRoots = 0;
 
     if (DoubleComparison (b, 0) == 1) {
@@ -153,6 +154,9 @@ int LinearEquation (double b, double c, double* x1, double* x2)
 
 int QuadraticEquation (double a, double b, double c, double *x1, double *x2)
 {
+    assert (x1 != NULL);
+    assert (x2 != NULL);
+
     int NumOfRoots = 0;
     double discriminant = b*b - 4*a*c;
 
@@ -212,3 +216,4 @@ void CleanTheBuffer ()
 {
     while(getchar() != '\n');
 }
+

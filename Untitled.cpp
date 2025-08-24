@@ -3,24 +3,37 @@
 #include <float.h>
 #include <math.h>
 
-bool DoubleComparison (double a, double b);
+int FinishProgram ();
+void CleanTheBuffer ();
 
 int main() {
-    double a = 0, b = 0;
-    if (DoubleComparison(a, b))
-        printf("kaif");
+    if (FinishProgram() == 1)
+        printf ("you've finished\n");
+    else if (FinishProgram() == 0)
+        printf ("enter the coefficients\n");
     else
-        printf("nekaif");
+        printf ("error, u r an idiot.\n");
 }
 
-bool DoubleComparison (double a, double b)
+int FinishProgram ()
 {
-    double diff = fabs(a - b);
-    a = fabs(a);
-    b = fabs(b);
-    double largest = (b > a) ? b : a;
-    if(diff <= largest * FLT_EPSILON)
-        return true; // true
-    else
-        return false; // false
+    int UsersAnswer = -1;
+    int AnsMatches = 0;
+
+    while (AnsMatches == 0) {
+
+        if (scanf ("%d", &UsersAnswer) == 1 && (UsersAnswer == 0 || UsersAnswer == 1) && getchar() == '\n')
+            return UsersAnswer;
+        CleanTheBuffer();
+        printf("Incorrect input, try again.\n"
+                "Do you want to finish?\n"
+                "(input 1 if you want to End the program and 0 if you want to continue)\n");
+    }
+
+    return 0;
+}
+
+void CleanTheBuffer ()
+{
+    while(getchar() != '\n');
 }
