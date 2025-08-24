@@ -1,112 +1,121 @@
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
-#include <string.h>
 #include <float.h>
 
 // this program solves the quadratic equation
 
-int Solve();
-int InputCoefficients (double *a, double *b, double *c);
-int SolveEquation (double a, double b, double c, double* x1, double* x2);
-int QuadraticEquation (double a, double b, double c, double* x1, double* x2);
-int LinearEquation (double b, double c, double* x1, double* x2);
-int FinishProgram ();
-void ChooseCase (int NumOfRoots, double x1, double x2);
-void CleanTheBuffer ();
-bool DoubleComparison (double a, double b);
-
-enum RootsNumber {
+enum RootsNumber
+{
     NO_ROOTS = 0,
     INF = -1,
     ONE_ROOT = 1,
-    TWO_ROOT = 2,
+    TWO_ROOT = 2
+};
+
+enum UsersDesire
+{
     WANT_TO_FINISH = 0,
     WANT_TO_CORRECT = 1,
     WANT_TO_SOLVE = 2
 };
 
+
+void Solve();
+UsersDesire InputCoefficients (double* a, double* b, double* c);
+RootsNumber SolveEquation (double a, double b, double c, double* x1, double* x2);
+RootsNumber SolveQuadraticEquation (double a, double b, double c, double* x1, double* x2);
+RootsNumber SolveLinearEquation (double b, double c, double* x1, double* x2);
+UsersDesire FinishProgram ();
+void RunTest();
+int TestMyProgram(double a, double b, double c, double x1ref, double x2ref, int numOfRoots);
+void ChooseCase (RootsNumber numOfRoots, double x1, double x2);
+void CleanTheBuffer ();
+bool CheckDoubleEquality (double a, double b);
+bool IsZero (double a);
+
 int main ()
 {
     printf("You are solving the quadratic equation ax2 + bx + c = 0.\n");
-    printf("Please, enter the coefficients a, b, c:\n");
 
-    Solve();
+    // Solve();
 
-    printf("You've finished the program.\n");
+    RunTest();
 
     return 0;
 }
 
-int Solve()
+void Solve()
 {
     double a = 0, b = 0, c = 0;  //coefficients
     double x1 = 0, x2 = 0;   //roots
 
-    while (true){
-        int UserWant = InputCoefficients(&a, &b, &c);
+    while (true) {
+        int usersWish = InputCoefficients(&a, &b, &c);
 
-        if (UserWant == WANT_TO_FINISH)
-            return 0;
+        if (usersWish == WANT_TO_FINISH) {
 
-        else if (UserWant == WANT_TO_CORRECT)
+            printf("You've finished the program.\n");
+
+            break;
+
+        } else if (usersWish == WANT_TO_CORRECT)
+
             continue;
 
         else {
-            int NumOfRoots = 0;
 
-            NumOfRoots = SolveEquation(a, b, c, &x1, &x2);
+            RootsNumber numOfRoots = SolveEquation(a, b, c, &x1, &x2);
 
-            ChooseCase(NumOfRoots, x1, x2);
+            ChooseCase(numOfRoots, x1, x2);
         }
     }
-
-    return 0;
 }
 
-int InputCoefficients (double *a, double *b, double *c)
+UsersDesire InputCoefficients (double* a, double* b, double* c)
 {
+    printf("Please, enter the coefficients a, b, c:\n");
 
-    if (scanf ("%lf", a) != 1 || scanf ("%lf", b) != 1 || scanf ("%lf", c) != 1 || getchar() != '\n') { //write function that checks spaces
+    if (scanf ("%lf", a) == 1 && scanf ("%lf", b) == 1 && scanf ("%lf", c) == 1 && getchar() == '\n') {
+        return WANT_TO_SOLVE;
+    }
     //in case if user made a mistake
 
-        printf("Incorrect input, try again:\n"
-                "Do you want to finish?\n"
-                "Input 1 to end the program or 0 to continue.\n");
+    printf("Incorrect input, try again:\n"
+            "Do you want to finish?\n"
+            "Input 1 to end the program or 0 to continue.\n");
 
-        CleanTheBuffer();
+    CleanTheBuffer();
 
-        if (FinishProgram() == 1)
-            return WANT_TO_FINISH;
+    if (FinishProgram() == WANT_TO_FINISH)
+        return WANT_TO_FINISH;
 
-        printf ("Please, enter the coefficients a, b, c:\n");
+    printf ("Please, enter the coefficients a, b, c:\n");
 
-        return WANT_TO_CORRECT;
-
-    } else    //if user input coefficients properly
-        return WANT_TO_SOLVE;
-
+    return WANT_TO_CORRECT;
 }
 
-int FinishProgram ()
+UsersDesire FinishProgram ()
 {
-    int UsersAnswer = -1;
-    int AnsMatches = 0;
+    UsersDesire usersAnswer = WANT_TO_FINISH;
 
-    while (AnsMatches == 0) {
+    while (true) {
+        if  (scanf ("%d", &usersAnswer) == 1 &&
+            (usersAnswer == 0 || usersAnswer == 1) &&
+            getchar() == '\n')
 
-        if (scanf ("%d", &UsersAnswer) == 1 && (UsersAnswer == 0 || UsersAnswer == 1) && getchar() == '\n')
-            return UsersAnswer;
+            return usersAnswer;
+
         CleanTheBuffer();
+
         printf("Incorrect input, try again.\n"
                 "Do you want to finish?\n"
                 "(input 1 if you want to End the program and 0 if you want to continue)\n");
     }
 
-    return 0;
 }
 
-int SolveEquation (double a, double b, double c, double *x1, double *x2)
+RootsNumber SolveEquation (double a, double b, double c, double* x1, double* x2)
 {
     assert (isfinite (a));
     assert (isfinite (b));
@@ -115,79 +124,79 @@ int SolveEquation (double a, double b, double c, double *x1, double *x2)
     assert (x1 != NULL);
     assert (x2 != NULL);
 
-    int NumOfRoots = 0;
+    RootsNumber numOfRoots = NO_ROOTS;
 
-    if (DoubleComparison (a, 0) == 1) {
-        NumOfRoots = LinearEquation(b, c, &*x1, &*x2);  //how can i improve?
+    if (IsZero(a)) { // IsZero
+        numOfRoots = SolveLinearEquation(b, c, &*x1, &*x2);  //how can i improve?
 
     } else {
-        NumOfRoots = QuadraticEquation(a, b, c, &*x1, &*x2);
+        numOfRoots = SolveQuadraticEquation(a, b, c, &*x1, &*x2);
 
     }
 
-    return NumOfRoots;
+    return numOfRoots;
 }
 
-int LinearEquation (double b, double c, double* x1, double* x2)
+RootsNumber SolveLinearEquation (double b, double c, double* x1, double* x2)
 {
     assert (x1 != NULL);
     assert (x2 != NULL);
 
-    int NumOfRoots = 0;
+    RootsNumber numOfRoots = NO_ROOTS;
 
-    if (DoubleComparison (b, 0) == 1) {
+    if (IsZero(b)) {
 
-        if (DoubleComparison (c, 0) == 1)
-            NumOfRoots = INF;
+        if (IsZero(c))
+            numOfRoots = INF;
 
         else
-            NumOfRoots = NO_ROOTS;
+            numOfRoots = NO_ROOTS;
 
     } else {
 
         *x1 = *x2 = -c / b;
-        NumOfRoots = ONE_ROOT;
+        numOfRoots = ONE_ROOT;
     }
 
-    return NumOfRoots;
+    return numOfRoots;
 }
 
-int QuadraticEquation (double a, double b, double c, double *x1, double *x2)
+RootsNumber SolveQuadraticEquation (double a, double b, double c, double* x1, double* x2)
 {
     assert (x1 != NULL);
     assert (x2 != NULL);
 
-    int NumOfRoots = 0;
-    double discriminant = b*b - 4*a*c;
+    RootsNumber numOfRoots = NO_ROOTS;
+    double discriminant = b * b - 4 * a * c;
 
     if (discriminant < 0)
-        NumOfRoots = NO_ROOTS;
+        numOfRoots = NO_ROOTS;
 
-    else if (DoubleComparison (discriminant, 0) == 1) {
+    else if (IsZero(discriminant)) {
 
-        NumOfRoots = ONE_ROOT;
-        *x1 = *x2 = -b / (2*a);
+        numOfRoots = ONE_ROOT;
+        *x1 = *x2 = - b / (2 * a);
 
     } else {
 
-        NumOfRoots = TWO_ROOT;
-        *x1 = (-b - sqrt(discriminant)) / (2*a);
-        *x2 = (-b + sqrt(discriminant)) / (2*a);
+        numOfRoots = TWO_ROOT;
+        *x1 = (-b - sqrt(discriminant)) / (2 * a);
+        *x2 = (-b + sqrt(discriminant)) / (2 * a);
     }
 
-    return NumOfRoots;
+    return numOfRoots;
 }
 
-void ChooseCase (int NumOfRoots, double x1, double x2) {
-    if (NumOfRoots == INF)
+void ChooseCase (RootsNumber numOfRoots, double x1, double x2) {
+    if (numOfRoots == INF)
 
         printf("This equation has infinite roots.\n");
 
-    else if (NumOfRoots == NO_ROOTS)
+    else if (numOfRoots == NO_ROOTS)
 
         printf("This equation has no roots.\n");
 
-    else if (NumOfRoots == ONE_ROOT)
+    else if (numOfRoots == ONE_ROOT)
 
         printf("This equation has one root: x = %.6lf.\n", x1);
 
@@ -197,7 +206,7 @@ void ChooseCase (int NumOfRoots, double x1, double x2) {
 
 }
 
-bool DoubleComparison (double a, double b)
+bool CheckDoubleEquality (double a, double b)
 {
     double diff = fabs(a - b);
 
@@ -212,8 +221,41 @@ bool DoubleComparison (double a, double b)
         return false;
 }
 
+bool IsZero (double a)
+{
+    if (CheckDoubleEquality (a, 0))
+        return true;
+    else
+        return false;
+}
+
 void CleanTheBuffer ()
 {
     while(getchar() != '\n');
+}
+
+void RunTest()
+{
+    int passed = 0;
+    passed += TestMyProgram(1, 2, 1, -1, -1, 1);
+    printf("There are %d out of 1 passed tests", passed);
+}
+
+int TestMyProgram(double a, double b, double c, double x1Ref, double x2Ref, int numOfRootsRef)
+{
+    double x1 = 0, x2 = 0;
+    int numOfRoots = SolveEquation(a, b, c, &x1, &x2);
+
+    if(!(CheckDoubleEquality(x1, x1Ref) && CheckDoubleEquality(x2, x2Ref) && numOfRoots == numOfRootsRef)) {
+
+        printf ("FALED: input: (a, b, c) = (%lf, %lf, %lf),\n"
+                "output: (x1, x2, numOfRoots) = (%lf, %lf, %d),\n"
+                "expected: (x1, x2, numOfRoots) = (%lf, %lf, %d)\n",
+
+                a, b, c, x1, x2, numOfRoots, x1Ref, x2Ref, numOfRootsRef);
+
+        return 0;
+    }
+    return 1;
 }
 
