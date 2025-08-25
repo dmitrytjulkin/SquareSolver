@@ -5,6 +5,9 @@
 // #include "Test4SquareSolver.cpp"
 
 // this program solves the quadratic equation
+//TODO if input '\0'
+//TODO check input (a, b, c) = (1 e -12, 1, 1)
+//TODO Add constructives
 
 enum RootsNumber
 {
@@ -16,15 +19,25 @@ enum RootsNumber
 
 enum UsersDesire
 {
-    WANT_TO_FINISH = 1,
-    WANT_TO_CORRECT = 0,
-    WANT_TO_SOLVE = 2
+    WANT_TO_SOLVE,
+    WANT_TO_FINISH,
+    WANT_TO_CORRECT,
 };
 
 const int FIN = 1;
 const int CONTIN = 0;
 
-void Solve();
+// struct TestCoefficientsData
+// {
+//     double a, b, c;
+// }
+//
+// struct TestRootsData
+// {
+//     double x1, x2;
+//     int nRoots;
+// };
+
 UsersDesire InputCoefficients (double* a, double* b, double* c);
 RootsNumber SolveEquation (double a, double b, double c, double* x1, double* x2);
 RootsNumber SolveQuadraticEquation (double a, double b, double c, double* x1, double* x2);
@@ -32,24 +45,16 @@ RootsNumber SolveLinearEquation (double b, double c, double* x1, double* x2);
 int FinishProgram ();
 void RunTest();
 int TestMyProgram(double a, double b, double c, double x1Ref, double x2Ref, int numOfRootsRef);
-void ChooseCase (RootsNumber numOfRoots, double x1, double x2);
+void PrintCase (RootsNumber numOfRoots, double x1, double x2);
 void CleanTheBuffer ();
 bool CheckDoubleEquality (double a, double b);
 bool IsZero (double a);
+void AbsIfZero(double* x);
 
 int main ()
 {
-    printf("You are solving the quadratic equation ax2 + bx + c = 0.\n");
+    printf("You are solving the quadratic equation ax^2 + bx + c = 0.\n");
 
-     Solve();
-
-    // RunTest();
-
-    return 0;
-}
-
-void Solve()
-{
     double a = 0, b = 0, c = 0;  //coefficients
     double x1 = 0, x2 = 0;   //roots
 
@@ -70,13 +75,21 @@ void Solve()
 
             RootsNumber numOfRoots = SolveEquation(a, b, c, &x1, &x2);
 
-            ChooseCase(numOfRoots, x1, x2);
+            PrintCase(numOfRoots, x1, x2);
         }
     }
+
+    // RunTest();
+
+    return 0;
 }
 
 UsersDesire InputCoefficients (double* a, double* b, double* c)
 {
+    assert (isfinite (*a));
+    assert (isfinite (*b));
+    assert (isfinite (*c));
+
     printf("Please, enter the coefficients a, b, c:\n");
 
     if (scanf ("%lg", a) == 1 && scanf ("%lg", b) == 1 && scanf ("%lg", c) == 1 && getchar() == '\n') {
@@ -131,11 +144,11 @@ RootsNumber SolveEquation (double a, double b, double c, double* x1, double* x2)
 
     if (IsZero(a)) {
 
-        numOfRoots = SolveLinearEquation(b, c, &*x1, &*x2);  //how can i improve?
+        numOfRoots = SolveLinearEquation(b, c, x1, x2);
 
     } else {
 
-        numOfRoots = SolveQuadraticEquation(a, b, c, &*x1, &*x2);
+        numOfRoots = SolveQuadraticEquation(a, b, c, x1, x2);
 
     }
 
@@ -205,7 +218,8 @@ RootsNumber SolveQuadraticEquation (double a, double b, double c, double* x1, do
     return numOfRoots;
 }
 
-void ChooseCase (RootsNumber numOfRoots, double x1, double x2) {
+
+void PrintCase (RootsNumber numOfRoots, double x1, double x2) {
     if (numOfRoots == INF_ROOTS)
 
         printf("This equation has infinite roots.\n");
@@ -214,13 +228,20 @@ void ChooseCase (RootsNumber numOfRoots, double x1, double x2) {
 
         printf("This equation has no roots.\n");
 
-    else if (numOfRoots == ONE_ROOT)
+    else if (numOfRoots == ONE_ROOT) {
 
-        printf("This equation has one root: x = %.6lg.\n", x1);
+            AbsIfZero(&x1);
 
-    else
+            printf("This equation has one root: x = %.6lg.\n", x1);
+
+    } else {
+
+        AbsIfZero(&x1);
+        AbsIfZero(&x2);
 
         printf("This equation has two roots: x1 = %.6lg, x2 = %.6lg.\n", x1, x2);
+
+    }
 }
 
 bool CheckDoubleEquality (double a, double b)
@@ -251,6 +272,13 @@ bool IsZero (double a)
         return false;
 }
 
+void AbsIfZero (double* x)
+{
+    if (IsZero(*x))
+
+        *x = fabs(*x);
+}
+
 void CleanTheBuffer ()
 {
     while(getchar() != '\n');
@@ -262,7 +290,7 @@ void CleanTheBuffer ()
 //     passed += TestMyProgram(1, 2, 1, -1, -1, 1);
 //     printf("There are %d out of 1 passed tests", passed);
 // }
-//
+
 // int TestMyProgram(double a, double b, double c, double x1Ref, double x2Ref, int numOfRootsRef)
 // {
 //     double x1 = 0, x2 = 0;
