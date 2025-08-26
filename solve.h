@@ -13,8 +13,6 @@ enum UsersDesire
     WANT_TO_CORRECT,
 };
 
-const int FIN = 1;
-const int CONTIN = 0;
 
 struct CoefficientsData
 {
@@ -31,3 +29,4 @@ UsersDesire InputCoefficients (double* a, double* b, double* c);
 RootsNumber SolveEquation (double a, double b, double c, double* x1, double* x2);
 void PrintCase (RootsNumber numOfRoots, double x1, double x2);
 bool CheckDoubleEquality (double a, double b);
+void AbsIfZero (double* x);

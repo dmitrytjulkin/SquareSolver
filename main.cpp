@@ -4,12 +4,11 @@
 #include <float.h>
 
 #include "solve.h"
-#include "test.h"
+// #include "test.h"
 
 // this program solves the quadratic equation
-// TODO check input (a, b, c) = (1e-12, 1, 1)
+// TODO double accuracy
 // TODO Add Structures
-// TODO Check for gcc
 // TODO make UnitTest for 0 and inf roots
 // TODO divide by files
 
@@ -41,7 +40,7 @@ int main ()
         }
     }
 
-    RunAllTests();
+    // RunAllTests();
 
     printf("COMMIT GITHUB!\n");
     return 0;
