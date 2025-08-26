@@ -25,8 +25,14 @@ struct RootsData
     int nRoots;
 };
 
-UsersDesire InputCoefficients (double* a, double* b, double* c);
 RootsNumber SolveEquation (double a, double b, double c, double* x1, double* x2);
-void PrintCase (RootsNumber numOfRoots, double x1, double x2);
 bool CheckDoubleEquality (double a, double b);
 void AbsIfZero (double* x);
+
+UsersDesire InputCoefficients (double* a, double* b, double* c);
+void CleanTheBuffer ();
+
+int FinishProgram ();
+void PrintCase (RootsNumber numOfRoots, double x1, double x2);
+
+
