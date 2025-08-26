@@ -4,23 +4,19 @@
 #include <float.h>
 
 #include "solve.h"
-// #include "test.h"
 
 // this program solves the quadratic equation
 // TODO double accuracy
-// TODO Add Structures
 // TODO make UnitTest for 0 and inf roots
-// TODO divide by files
 
 int main ()
 {
     printf("You are solving the quadratic equation ax^2 + bx + c = 0.\n");
-
-    double a = 0, b = 0, c = 0;
-    double x1 = 0, x2 = 0;   //roots
+    CoefficientsData coefficients = {.a = 0, .b = 0, .c = 0};
+    RootsData roots = {.x1 = 0, .x2 = 0};
 
     while (true) {
-        int usersWish = InputCoefficients(&a, &b, &c);
+        int usersWish = InputCoefficients(&coefficients);
 
         if (usersWish == WANT_TO_FINISH) {
 
@@ -34,9 +30,9 @@ int main ()
 
         else {
 
-            RootsNumber numOfRoots = SolveEquation(a, b, c, &x1, &x2);
+            RootsNumber numOfRoots = SolveEquation(coefficients, &roots);
 
-            PrintCase(numOfRoots, x1, x2);
+            PrintCase(numOfRoots, roots);
         }
     }
 

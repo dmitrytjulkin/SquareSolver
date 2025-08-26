@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <float.h>
 
-// #include "solve.h"
+#include "solve.h"
 
 struct TestData
 {
@@ -13,6 +13,8 @@ struct TestData
 };
 
 int TestMyProgram(TestData test);
+
+// x1 < x2
 
 void RunAllTests()
 {

@@ -24,7 +24,7 @@ int FinishProgram ()
     }
 }
 
-void PrintCase (RootsNumber numOfRoots, double x1, double x2) {
+void PrintCase (RootsNumber numOfRoots, RootsData roots) {
     if (numOfRoots == INF_ROOTS)
 
         printf("This equation has infinite roots.\n");
@@ -35,16 +35,16 @@ void PrintCase (RootsNumber numOfRoots, double x1, double x2) {
 
     else if (numOfRoots == ONE_ROOT) {
 
-            AbsIfZero(&x1);
+            AbsIfZero(&roots.x1);
 
-            printf("This equation has one root: x = %.6lg.\n", x1);
+            printf("This equation has one root: x = %.6lg.\n", roots.x1);
 
     } else {
 
-        AbsIfZero(&x1);
-        AbsIfZero(&x2);
+        AbsIfZero(&roots.x1);
+        AbsIfZero(&roots.x2);
 
-        printf("This equation has two roots: x1 = %.6lg, x2 = %.6lg.\n", x1, x2);
+        printf("This equation has two roots: x1 = %.6lg, x2 = %.6lg.\n", roots.x1, roots.x2);
 
     }
 }

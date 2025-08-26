@@ -4,15 +4,15 @@
 
 #include "solve.h"
 
-UsersDesire InputCoefficients (double* a, double* b, double* c)
+UsersDesire InputCoefficients (CoefficientsData* coefficients)
 {
-    assert (isfinite (*a));
-    assert (isfinite (*b));
-    assert (isfinite (*c));
+    assert (isfinite (coefficients->a));
+    assert (isfinite (coefficients->b));
+    assert (isfinite (coefficients->c));
 
     printf("Please, enter the coefficients a, b, c:\n");
 
-    if (scanf ("%lg", a) == 1 && scanf ("%lg", b) == 1 && scanf ("%lg", c) == 1 && getchar() == '\n') {
+    if (scanf ("%lg", &(coefficients->a)) == 1 && scanf ("%lg", &(coefficients->b)) == 1 && scanf ("%lg", &(coefficients->c)) == 1 && getchar() == '\n') {
 
         return WANT_TO_SOLVE;
     }

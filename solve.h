@@ -22,17 +22,17 @@ struct CoefficientsData
 struct RootsData
 {
     double x1, x2;
-    int nRoots;
 };
 
-RootsNumber SolveEquation (double a, double b, double c, double* x1, double* x2);
+RootsNumber SolveEquation (CoefficientsData coefficients, RootsData* roots);
 bool CheckDoubleEquality (double a, double b);
 void AbsIfZero (double* x);
 
-UsersDesire InputCoefficients (double* a, double* b, double* c);
+UsersDesire InputCoefficients (CoefficientsData* coefficients);
 void CleanTheBuffer ();
 
 int FinishProgram ();
-void PrintCase (RootsNumber numOfRoots, double x1, double x2);
+void PrintCase (RootsNumber numOfRoots, RootsData roots);
 
+void RunAllTests();
 

@@ -5,42 +5,42 @@
 
 #include "solve.h"
 
-RootsNumber SolveQuadraticEquation (double a, double b, double c, double* x1, double* x2);
-RootsNumber SolveLinearEquation (double b, double c, double* x1, double* x2);
+RootsNumber SolveQuadraticEquation (CoefficientsData coefficients, RootsData* roots);
+RootsNumber SolveLinearEquation (double b, double c, RootsData* roots);
 bool IsZero (double a);
 void AbsIfZero(double* x);
 
-RootsNumber SolveEquation (double a, double b, double c, double* x1, double* x2)
+RootsNumber SolveEquation (CoefficientsData coefficients, RootsData* roots)
 {
-    assert (isfinite (a));
-    assert (isfinite (b));
-    assert (isfinite (c));
+    assert (isfinite (coefficients.a));
+    assert (isfinite (coefficients.b));
+    assert (isfinite (coefficients.c));
 
-    assert (x1 != NULL);
-    assert (x2 != NULL);
+    assert (roots->x1 != NULL);
+    assert (roots->x2 != NULL);
 
     RootsNumber numOfRoots = NO_ROOTS;
 
-    if (IsZero(a)) {
+    if (IsZero(coefficients.a)) {
 
-        numOfRoots = SolveLinearEquation(b, c, x1, x2);
+        numOfRoots = SolveLinearEquation(coefficients.b, coefficients.c, roots);
 
     } else {
 
-        numOfRoots = SolveQuadraticEquation(a, b, c, x1, x2);
+        numOfRoots = SolveQuadraticEquation(coefficients, roots);
 
     }
 
     return numOfRoots;
 }
 
-RootsNumber SolveLinearEquation (double b, double c, double* x1, double* x2)
+RootsNumber SolveLinearEquation (double b, double c, RootsData* roots)
 {
     assert (isfinite (b));
     assert (isfinite (c));
 
-    assert (x1 != NULL);
-    assert (x2 != NULL);
+    assert (roots->x1 != NULL);
+    assert (roots->x2 != NULL);
 
     RootsNumber numOfRoots = NO_ROOTS;
 
@@ -56,7 +56,7 @@ RootsNumber SolveLinearEquation (double b, double c, double* x1, double* x2)
 
     } else {
 
-        *x1 = *x2 = -c / b;
+        roots->x1 = roots->x2 = -c / b;
 
         numOfRoots = ONE_ROOT;
     }
@@ -64,17 +64,17 @@ RootsNumber SolveLinearEquation (double b, double c, double* x1, double* x2)
     return numOfRoots;
 }
 
-RootsNumber SolveQuadraticEquation (double a, double b, double c, double* x1, double* x2)
+RootsNumber SolveQuadraticEquation (CoefficientsData coefficients, RootsData* roots)
 {
-    assert (isfinite (a));
-    assert (isfinite (b));
-    assert (isfinite (c));
+    assert (isfinite (coefficients.a));
+    assert (isfinite (coefficients.b));
+    assert (isfinite (coefficients.c));
 
-    assert (x1 != NULL);
-    assert (x2 != NULL);
+    assert (roots->x1 != NULL);
+    assert (roots->x2 != NULL);
 
     RootsNumber numOfRoots = NO_ROOTS;
-    double discriminant = b * b - 4 * a * c;
+    double discriminant = coefficients.b * coefficients.b - 4 * coefficients.a * coefficients.c;
 
     if (discriminant < 0)
 
@@ -84,14 +84,14 @@ RootsNumber SolveQuadraticEquation (double a, double b, double c, double* x1, do
 
         numOfRoots = ONE_ROOT;
 
-        *x1 = *x2 = - b / (2 * a);
+        roots->x1 = roots->x2 = - coefficients.b / (2 * coefficients.a);
 
     } else {
 
         numOfRoots = TWO_ROOT;
 
-        *x1 = (-b - sqrt(discriminant)) / (2 * a);
-        *x2 = (-b + sqrt(discriminant)) / (2 * a);
+        roots->x1 = (-coefficients.b - sqrt(discriminant)) / (2 * coefficients.a);
+        roots->x2 = (-coefficients.b + sqrt(discriminant)) / (2 * coefficients.a);
     }
 
     return numOfRoots;
