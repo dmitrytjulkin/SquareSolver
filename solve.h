@@ -13,6 +13,7 @@ enum UsersDesire
     WANT_TO_CORRECT,
 };
 
+const double NOT_A_ROOT = -1;
 
 struct CoefficientsData
 {
@@ -24,15 +25,22 @@ struct RootsData
     double x1, x2;
 };
 
-RootsNumber SolveEquation (CoefficientsData coefficients, RootsData* roots);
+struct CoefsNRoots
+{
+    CoefficientsData coefficients;
+    RootsData roots;
+    int numOfRoots;
+};
+
+RootsNumber SolveEquation (CoefficientsData param.coefficients, RootsData (param->roots));
 bool CheckDoubleEquality (double a, double b);
 void AbsIfZero (double* x);
 
-UsersDesire InputCoefficients (CoefficientsData* coefficients);
+UsersDesire InputCoefficients (CoefficientsData param->coefficients);
 void CleanTheBuffer ();
 
 int FinishProgram ();
-void PrintCase (RootsNumber numOfRoots, RootsData roots);
+void PrintCase (RootsNumber param.numOfRoots, RootsData param.roots);
 
 void RunAllTests();
 

@@ -25,6 +25,7 @@ int FinishProgram ()
 }
 
 void PrintCase (RootsNumber numOfRoots, RootsData roots) {
+// switch case
     if (numOfRoots == INF_ROOTS)
 
         printf("This equation has infinite roots.\n");
